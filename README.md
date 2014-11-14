@@ -1,6 +1,5 @@
-AirShiny Application
-#########################
-App Description
+**AirShiny Application**
+
 
 This simple application browses through real pollution data taken by ArpaPuglia.
 The dataset contains the the first semester of 2014 pollutants as resulted from 10 stations in Taranto province.
