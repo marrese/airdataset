@@ -46,9 +46,10 @@ shinyUI(fluidPage(
     column(4,
            h4("Air Quality Explorer in Taranto Province"),
            p("This simple application browses through real pollution data taken by ArpaPuglia."),
-           p("The dataset contains the the first semester of 2014 pollutants as resulted from 10 stations in Taranto province."),
+           p("The dataset contains pollutant values as resulted from 10 stations in Taranto province during the first semester of 2014."),
            
-           p("For more informations follow this ", a(href="https://rpubs.com/marrese52/40472", "link.")),
+           p("For more informations follow the ", a(href="https://rpubs.com/marrese52/40472", "presentation,")),
+           p("or the ",a(href="AirshinyDoc.html","documentation")," page."),
            br(),
            img(src = "Logo.png", height = 72, width = 72),
            br(),
@@ -77,4 +78,3 @@ shinyUI(fluidPage(
     #)
   )
 ))
-
