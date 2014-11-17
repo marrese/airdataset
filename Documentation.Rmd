@@ -1,0 +1,101 @@
+# AirShiny - Exploring Pollution Data in an Italian Province 
+
+author: R.Marrese
+date: 2014 Nov 13th
+
+
+## Description 
+
+
+The **AirShiny** webapp let the user to browse through the environmental data (specifically air pollution chemical data). The dataset contains data taken from Apulian Environmental Agency among some monitoring stations during the first semester of 2014. 
+
+>*The purpose is to facilitate users in exploring the dataset and operate*
+>*somefirst and simple visual correlation on pollution trend and causes.*
+
+A generalized plot is created as soon as the user put the query by mean of the available widgets. Starting from the overall picture the user may then focalize on a particular time period or monitoring station. 
+
+Aside of a scatterplot, the graphic section also draws a smooth line and interval around the observed data.
+
+
+## The Motivation
+```{r,echo=FALSE,eval=TRUE,message=FALSE,fig.width=10,warning=FALSE}
+library(RCurl)
+library(ggplot2)
+url<-"https://dl.dropboxusercontent.com/s/bp94lv1b09s5x33/airdatTA.csv"
+myCsv <- getURL(url)
+w<-read.csv(textConnection(myCsv))
+w$date=as.Date(w$date)
+w$day=weekdays(w$date)
+w$day = factor(w$day, ordered=TRUE, levels=c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday","Saturday"))
+names(w)[8]="month_no"
+```
+
+The dataset `airdata` contains `r nrow(w)` observations and `r ncol(w)` variables. Taking `PM10` pollutant for instance, the following  plot syntetized the variability of data and the results of each station (see blue lines).
+
+On overall station the observed mean is **`r round(mean(w$PM10,na.rm=TRUE), 2)`** and the standard deviation is as large as **`r round(sd(w$PM10,na.rm=TRUE), 2)`**. 
+
+This represents a good motivation of implementing a simple exploration dashboard.
+
+```{r,echo=FALSE,eval=TRUE,message=FALSE,fig.width=10,warning=FALSE}
+qplot(date, PM10,data=w,facets=.~station, geom=c("point","smooth"),method="lm", main="2014 1° sem - PM10 value per station", ylab="PM10", xlab="date", alpha=I(0.2))
+```
+
+
+## Features and Functions
+
+The user can visualize and compare data for each of the following pollutant:
+- **PM10** and **PM2.5** - particulate matter
+- **CO** - carbonic anidride
+- **SO2** - sulfur dioxide 
+- **O3** - ozone
+- **C6H6** - Benzene
+- **H2S** - hydrogen sulfide
+- **iqa** - general quality index (calculated on previous values)
+- by setting time period, color, station, an in-depth
+exploration  is quite easy to perform. 
+
+
+## Using the App
+The app is managed by this simple control panel.
+
+![dashboard](airshiny.jpg)
+
+Using the control panel the user can choose:
+- all stations or just one;
+- period of observation
+- comparison between pollutant playing with X & Y Axis.
+
+Furthermore:
+- a **jitter** box allows  a better rendering
+- a **smooth** box trace tendency and confidence interval on scatterplot.
+
+A tipical plot is drawn as follows, where `PM10` pollutant data are drawn by `date`. Note that the color of points change according to `iqa` (quality index), showing evidence of correlation between
+`PM10` and averall quality index. Note also that the **smooth** option let the user to evaluate the data trend (blue line and grey interval).
+
+```{r, echo=FALSE,eval=TRUE,message=FALSE, fig.width=10,warning=FALSE}
+p <- ggplot(w, aes_string(x="date", y="PM10")) + geom_point()
+p <- p + aes_string(color="iqa")
+p <- p + geom_jitter()
+p <- p + geom_smooth()
+p
+```
+
+## Future development & References
+
+**Future developments**
+
+To further analyze the dataset some new tabs may be added: 
+* boxplot
+* confidence interval between pollutant statistics
+* regression analysis,
+* and more..
+
+**Reference**
+
+The web app may be launched at this [this](https://marrese.shinyapps.io/airshiny/) url.
+
+The related code may be inspected at [this](https://github.com/marrese/airdataset) url.
+
+More data can be downloaded at the [ArpaPuglia](http://www.arpa.puglia.it) website.
+
+**Enjoy the application**
